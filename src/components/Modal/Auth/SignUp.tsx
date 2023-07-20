@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Button, Flex, Input, Text } from "@chakra-ui/react";
 import { ModalView, authModalState } from "../../../atoms/authModalAtom";
 import { useSetRecoilState } from "recoil";
+import { auth } from "@/src/firebase/clientApp";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
 type SignUpProps = {
   toggleView: (view: ModalView) => void;
@@ -9,13 +11,26 @@ type SignUpProps = {
 
 const SignUp = ({ toggleView }: SignUpProps) => {
   const setAuthModalState = useSetRecoilState(authModalState);
+  const [error, setError] = useState("");
+
   const [signUpForm, setSignUpForm] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const onSubmit = () => {};
+  const [createUserWithEmailAndPassword, user, loading, userError] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (error) setError("");
+    if (signUpForm.password != signUpForm.confirmPassword) {
+      setError("Passowords do not match");
+      return;
+    }
+    createUserWithEmailAndPassword(signUpForm.email, signUpForm.password);
+  };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSignUpForm((prev) => ({
@@ -92,7 +107,18 @@ const SignUp = ({ toggleView }: SignUpProps) => {
         }}
         bg="gray.50"
       />
-      <Button width="100%" height="36px" mb={2} mt={2} type="submit">
+      {error && (
+        <Text textAlign="center" color="red" fontSize="10pt">
+          {error}
+        </Text>
+      )}
+      <Button
+        width="100%"
+        height="36px"
+        mb={2}
+        mt={2}
+        type="submit"
+        isLoading={loading}>
         Sign Up
       </Button>
       <Flex fontSize="9pt" justifyContent="center">
