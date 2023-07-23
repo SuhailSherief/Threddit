@@ -12,20 +12,31 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import AuthInputs from "./AuthInputs";
 import OAuthButtons from "./OAuthButtons";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/src/firebase/clientApp";
+import ResetPassword from "./ResetPassword";
 
 type Props = {};
 
 const AuthModal = (props: Props) => {
   const [modalState, setModalState] = useRecoilState(authModalState);
+
   const handleClose = () =>
     setModalState((prev) => ({
       ...prev,
       open: false,
     }));
+
+  const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) handleClose();
+  }, [user]);
+
   const toggleView = (view: string) => {
     setModalState({
       ...modalState,
@@ -54,7 +65,7 @@ const AuthModal = (props: Props) => {
               alignItems="center"
               justifyContent="center"
               width="70%">
-              {/* {modalState.view === "login" || modalState.view === "signup" ? (
+              {modalState.view === "login" || modalState.view === "signup" ? (
                 <>
                   <OAuthButtons />
                   OR
@@ -62,12 +73,7 @@ const AuthModal = (props: Props) => {
                 </>
               ) : (
                 <ResetPassword toggleView={toggleView} />
-              )} */}
-              <OAuthButtons />
-              <Text color="gray.500" fontWeight={700}>
-                OR
-              </Text>
-              <AuthInputs toggleView={toggleView} />
+              )}
             </Flex>
           </ModalBody>
         </ModalContent>
