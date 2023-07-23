@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Button, Flex, Input, Text } from "@chakra-ui/react";
 import { ModalView, authModalState } from "../../../atoms/authModalAtom";
 import { useSetRecoilState } from "recoil";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "@/src/firebase/clientApp";
+import { FIREBASE_ERRORS } from "@/src/firebase/errors";
 
 type LoginProps = {
   toggleView: (view: ModalView) => void;
@@ -13,8 +16,18 @@ const Login = ({ toggleView }: LoginProps) => {
     email: "",
     password: "",
   });
+  const [formError, setFormError] = useState("");
+  const [signInWithEmailAndPassword, user, loading, authError] =
+    useSignInWithEmailAndPassword(auth);
 
-  const onSubmit = () => {};
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (formError) setFormError("");
+    if (!form.email.includes("@")) {
+      return setFormError("Please enter a valid email");
+    }
+    signInWithEmailAndPassword(form.email, form.password);
+  };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
@@ -69,21 +82,37 @@ const Login = ({ toggleView }: LoginProps) => {
         }}
         bg="gray.50"
       />
-      <Button width="100%" height="36px" mb={2} mt={2} type="submit">
+      <Text textAlign="center" mt={2} fontSize="10pt" color="red">
+        {formError ||
+          FIREBASE_ERRORS[authError?.message as keyof typeof FIREBASE_ERRORS]}
+      </Text>
+      <Button
+        width="100%"
+        height="36px"
+        mb={2}
+        mt={2}
+        type="submit"
+        isLoading={loading}>
         Log In
       </Button>
-      {/* <Flex justifyContent="center" mb={2}>
+      <Flex justifyContent="center" mb={2}>
         <Text fontSize="9pt" mr={1}>
           Forgot your password?
         </Text>
         <Text
           fontSize="9pt"
+          fontWeight={700}
           color="blue.500"
           cursor="pointer"
-          onClick={() => toggleView("resetPassword")}>
-          Reset
+          onClick={() =>
+            setAuthModalState((prev) => ({
+              ...prev,
+              view: "resetPassword",
+            }))
+          }>
+          RESET
         </Text>
-      </Flex> */}
+      </Flex>
       <Flex fontSize="9pt" justifyContent="center">
         <Text mr={1}>New here?</Text>
         <Text
