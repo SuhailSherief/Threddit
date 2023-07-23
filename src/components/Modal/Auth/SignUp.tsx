@@ -4,6 +4,7 @@ import { ModalView, authModalState } from "../../../atoms/authModalAtom";
 import { useSetRecoilState } from "recoil";
 import { auth } from "@/src/firebase/clientApp";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { FIREBASE_ERRORS } from "@/src/firebase/errors";
 
 type SignUpProps = {
   toggleView: (view: ModalView) => void;
@@ -107,11 +108,10 @@ const SignUp = ({ toggleView }: SignUpProps) => {
         }}
         bg="gray.50"
       />
-      {error && (
-        <Text textAlign="center" color="red" fontSize="10pt">
-          {error}
-        </Text>
-      )}
+      <Text textAlign="center" color="red" fontSize="10pt">
+        {error ||
+          FIREBASE_ERRORS[userError?.message as keyof typeof FIREBASE_ERRORS]}
+      </Text>
       <Button
         width="100%"
         height="36px"
