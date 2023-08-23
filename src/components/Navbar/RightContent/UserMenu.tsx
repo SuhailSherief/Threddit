@@ -19,8 +19,9 @@ import { MdOutlineLogin } from "react-icons/md";
 
 import React from "react";
 import { auth } from "@/src/firebase/clientApp";
-import { useSetRecoilState } from "recoil";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { authModalState } from "@/src/atoms/authModalAtom";
+import { communityState } from "@/src/atoms/communitiesAtom";
 
 type UserMenuProps = {
   user?: User | null;
@@ -28,6 +29,10 @@ type UserMenuProps = {
 
 const UserMenu = ({ user }: UserMenuProps) => {
   const setAuthModalState = useSetRecoilState(authModalState);
+
+  const logout = async () => {
+    signOut(auth);
+  };
   return (
     <Menu>
       <MenuButton
@@ -85,7 +90,7 @@ const UserMenu = ({ user }: UserMenuProps) => {
               fontSize="10pt"
               fontWeight={700}
               _hover={{ bg: "blue.500", color: "white" }}
-              onClick={() => signOut(auth)}>
+              onClick={logout}>
               <Flex align="center">
                 <Icon as={MdOutlineLogin} fontSize={20} mr={2} />
                 Log Out
