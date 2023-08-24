@@ -9,22 +9,16 @@ type HeaderProps = {
   communityData: Community;
 };
 
-const Header = ({ communityData }: HeaderProps) => {
-  const { communityStateValue, onJoinLeaveCommunity, loading } =
-    useCommunityData();
-  const isJoined = !!communityStateValue.mySnippets.find(
-    (item) => item.communityId === communityData.id
-  );
-
+const Header: React.FC<HeaderProps> = ({ communityData }) => {
   /**
    * !!!Don't pass communityData boolean until the end
    * It's a small optimization!!!
    */
-  //   const { communityStateValue, loading, error, onJoinLeaveCommunity } =
-  //     useCommunityData(!!communityData);
-  //   const isJoined = !!communityStateValue.mySnippets.find(
-  //     (item) => item.communityId === communityData.id
-  //   );
+  const { communityStateValue, loading, error, onJoinLeaveCommunity } =
+    useCommunityData(!!communityData);
+  const isJoined = !!communityStateValue.mySnippets.find(
+    (item) => item.communityId === communityData.id
+  );
 
   return (
     <Flex direction="column" width="100%" height="146px">
@@ -69,8 +63,8 @@ const Header = ({ communityData }: HeaderProps) => {
                 height="30px"
                 pr={6}
                 pl={6}
-                isLoading={loading}
-                onClick={() => onJoinLeaveCommunity(communityData, isJoined)}>
+                onClick={() => onJoinLeaveCommunity(communityData, isJoined)}
+                isLoading={loading}>
                 {isJoined ? "Joined" : "Join"}
               </Button>
             </Flex>
