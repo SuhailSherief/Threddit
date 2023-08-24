@@ -17,7 +17,7 @@ interface CommunityPageProps {
   communityData: Community;
 }
 
-const CommunityPage: NextPage<CommunityPageProps> = ({ communityData }) => {
+const CommunityPage = ({ communityData }: CommunityPageProps) => {
   const [user, loadingUser] = useAuthState(auth);
 
   const [communityStateValue, setCommunityStateValue] =

@@ -9,7 +9,7 @@ type HeaderProps = {
   communityData: Community;
 };
 
-const Header: React.FC<HeaderProps> = ({ communityData }) => {
+const Header = ({ communityData }: HeaderProps) => {
   /**
    * !!!Don't pass communityData boolean until the end
    * It's a small optimization!!!

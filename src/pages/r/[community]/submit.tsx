@@ -11,7 +11,7 @@ import { auth } from "../../../firebase/clientApp";
 import useCommunityData from "../../../hooks/useCommunityData";
 import PageContentLayout from "@/src/components/Layout/PageContentLayout";
 
-const CreateCommmunityPostPage: NextPage = () => {
+const CreateCommmunityPostPage = () => {
   const [user, loadingUser, error] = useAuthState(auth);
   const router = useRouter();
   const { community } = router.query;

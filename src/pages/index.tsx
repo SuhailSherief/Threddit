@@ -25,7 +25,7 @@ import usePosts from "../hooks/usePosts";
 import { Post, PostVote } from "../atoms/postAtom";
 import PageContentLayout from "../components/Layout/PageContentLayout";
 
-const Home: NextPage = () => {
+const Home = () => {
   const [user, loadingUser] = useAuthState(auth);
   const {
     postStateValue,

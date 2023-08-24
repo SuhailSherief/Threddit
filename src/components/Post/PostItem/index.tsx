@@ -42,7 +42,7 @@ export type PostItemContentProps = {
   homePage?: boolean;
 };
 
-const PostItem: React.FC<PostItemContentProps> = ({
+const PostItem = ({
   post,
   postIdx,
   onVote,
@@ -52,7 +52,7 @@ const PostItem: React.FC<PostItemContentProps> = ({
   userVoteValue,
   userIsCreator,
   homePage,
-}) => {
+}: PostItemContentProps) => {
   const [loadingImage, setLoadingImage] = useState(true);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const singlePostView = !onSelectPost; // function not passed to [pid]

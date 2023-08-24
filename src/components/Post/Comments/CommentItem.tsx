@@ -35,12 +35,12 @@ type CommentItemProps = {
   userId?: string;
 };
 
-const CommentItem: React.FC<CommentItemProps> = ({
+const CommentItem = ({
   comment,
   onDeleteComment,
   isLoading,
   userId,
-}) => {
+}: CommentItemProps) => {
   // const [loading, setLoading] = useState(false);
 
   // const handleDelete = useCallback(async () => {

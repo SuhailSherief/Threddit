@@ -26,11 +26,7 @@ type PostsProps = {
   loadingUser: boolean;
 };
 
-const Posts: React.FC<PostsProps> = ({
-  communityData,
-  userId,
-  loadingUser,
-}) => {
+const Posts = ({ communityData, userId, loadingUser }: PostsProps) => {
   /**
    * PART OF INITIAL SOLUTION BEFORE CUSTOM HOOK
    */

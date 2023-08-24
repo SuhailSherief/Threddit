@@ -64,11 +64,11 @@ type NewPostFormProps = {
   user: User;
 };
 
-const NewPostForm: React.FC<NewPostFormProps> = ({
+const NewPostForm = ({
   communityId,
   communityImageURL,
   user,
-}) => {
+}: NewPostFormProps) => {
   const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
   const [textInputs, setTextInputs] = useState({
     title: "",

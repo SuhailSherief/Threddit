@@ -9,7 +9,7 @@ import useDirectory from "../../hooks/useDirectory";
 
 type CreatePostProps = {};
 
-const CreatePostLink: React.FC<CreatePostProps> = () => {
+const CreatePostLink = () => {
   const router = useRouter();
   const { toggleMenuOpen } = useDirectory();
   const onClick = () => {

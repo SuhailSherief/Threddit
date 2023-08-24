@@ -11,13 +11,13 @@ type CommentInputProps = {
   onCreateComment: (comment: string) => void;
 };
 
-const CommentInput: React.FC<CommentInputProps> = ({
+const CommentInput = ({
   comment,
   setComment,
   loading,
   user,
   onCreateComment,
-}) => {
+}: CommentInputProps) => {
   return (
     <Flex direction="column" position="relative">
       {user ? (
@@ -51,14 +51,12 @@ const CommentInput: React.FC<CommentInputProps> = ({
             justify="flex-end"
             bg="gray.100"
             p="6px 8px"
-            borderRadius="0px 0px 4px 4px"
-          >
+            borderRadius="0px 0px 4px 4px">
             <Button
               height="26px"
               disabled={!comment.length}
               isLoading={loading}
-              onClick={() => onCreateComment(comment)}
-            >
+              onClick={() => onCreateComment(comment)}>
               Comment
             </Button>
           </Flex>
@@ -70,8 +68,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
           borderRadius={2}
           border="1px solid"
           borderColor="gray.100"
-          p={4}
-        >
+          p={4}>
           <Text fontWeight={600}>Log in or sign up to leave a comment</Text>
           <AuthButtons />
         </Flex>

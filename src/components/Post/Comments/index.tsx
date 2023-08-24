@@ -32,11 +32,7 @@ type CommentsProps = {
   community: string;
 };
 
-const Comments: React.FC<CommentsProps> = ({
-  user,
-  selectedPost,
-  community,
-}) => {
+const Comments = ({ user, selectedPost, community }: CommentsProps) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentFetchLoading, setCommentFetchLoading] = useState(false);

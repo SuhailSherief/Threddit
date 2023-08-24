@@ -32,12 +32,7 @@ type AboutProps = {
   loading?: boolean;
 };
 
-const About: React.FC<AboutProps> = ({
-  communityData,
-  pt,
-  onCreatePage,
-  loading,
-}) => {
+const About = ({ communityData, pt, onCreatePage, loading }: AboutProps) => {
   const [user] = useAuthState(auth); // will revisit how 'auth' state is passed
   const router = useRouter();
   const selectFileRef = useRef<HTMLInputElement>(null);

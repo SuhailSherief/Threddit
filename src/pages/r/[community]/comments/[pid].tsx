@@ -14,7 +14,7 @@ import PageContentLayout from "@/src/components/Layout/PageContentLayout";
 
 type PostPageProps = {};
 
-const PostPage: React.FC<PostPageProps> = () => {
+const PostPage = () => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const { community, pid } = router.query;
