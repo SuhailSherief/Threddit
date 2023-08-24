@@ -46,7 +46,7 @@ export const defaultPostState: PostState = {
   postUpdateRequired: true,
 };
 
-export const postState = atom<PostState>({
+export const postState = atom({
   key: "postState",
   default: defaultPostState,
 });
