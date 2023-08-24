@@ -14,9 +14,10 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { authModalState } from "../atoms/authModalAtom";
 import { Community, communityState } from "../atoms/communitiesAtom";
-import { Post, postState, PostVote } from "../atoms/postAtom";
+
 import { auth, firestore, storage } from "../firebase/clientApp";
 import { useRouter } from "next/router";
+import { postState, Post, PostVote } from "../atoms/postAtom";
 
 const usePosts = (communityData?: Community) => {
   const [user, loadingUser] = useAuthState(auth);
@@ -26,7 +27,6 @@ const usePosts = (communityData?: Community) => {
   const [error, setError] = useState("");
   const router = useRouter();
   const communityStateValue = useRecoilValue(communityState);
-  const currentCommunity = useRecoilValue(communityState).currentCommunity;
 
   const onSelectPost = (post: Post, postIdx: number) => {
     console.log("HERE IS STUFF", post, postIdx);
@@ -236,6 +236,11 @@ const usePosts = (communityData?: Community) => {
     // return () => unsubscribe();
   };
 
+  useEffect(() => {
+    if (!user?.uid || !communityStateValue.currentCommunity) return;
+    getCommunityPostVotes(communityStateValue.currentCommunity.id);
+  }, [user, communityStateValue.currentCommunity]);
+
   /**
    * DO THIS INITIALLY FOR POST VOTES
    */
@@ -261,18 +266,15 @@ const usePosts = (communityData?: Community) => {
   // }, [user, communityData]);
 
   useEffect(() => {
-    if (!user || !currentCommunity?.id) return;
-    getCommunityPostVotes(currentCommunity?.id);
-  }, [user, currentCommunity]);
-
-  useEffect(() => {
-    if (!user) {
+    // Logout or no authenticated user
+    if (!user?.uid && !loadingUser) {
       setPostStateValue((prev) => ({
         ...prev,
         postVotes: [],
       }));
+      return;
     }
-  }, [user]);
+  }, [user, loadingUser]);
 
   return {
     postStateValue,

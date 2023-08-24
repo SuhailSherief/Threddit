@@ -23,6 +23,12 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (!user || !!communityStateValue.mySnippets.length) return;
+
+    getSnippets();
+  }, [user]);
+
   const getSnippets = async () => {
     setLoading(true);
     try {
@@ -42,7 +48,7 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
 
   const getCommunityData = async (communityId: string) => {
     // this causes weird memory leak error - not sure why
-    setLoading(true);
+    // setLoading(true);
     console.log("GETTING COMMUNITY DATA");
 
     try {
@@ -153,25 +159,6 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (!user) {
-      setCommunityStateValue((prev) => ({
-        ...prev,
-        mySnippets: [],
-      }));
-      return;
-    }
-    getSnippets();
-  }, [user]);
-
-  useEffect(() => {
-    const { communityId } = router.query;
-
-    if (communityId && !communityStateValue.currentCommunity) {
-      getCommunityData(communityId as string);
-    }
-  }, [router.query, communityStateValue.currentCommunity]);
-
   // useEffect(() => {
   //   if (ssrCommunityData) return;
   //   const { community } = router.query;
@@ -185,43 +172,37 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
   //   }
   // }, [router.query]);
 
-  //   useEffect(() => {
-  //     // if (ssrCommunityData) return;
-  //     const { community } = router.query;
-  //     if (community) {
-  //       const communityData = communityStateValue.currentCommunity;
+  useEffect(() => {
+    // if (ssrCommunityData) return;
+    const { community } = router.query;
+    if (community) {
+      const communityData = communityStateValue.currentCommunity;
 
-  //       if (!communityData.id) {
-  //         getCommunityData(community as string);
-  //         return;
-  //       }
-  //       // console.log("this is happening", communityStateValue);
-  //     } else {
-  //       /**
-  //        * JUST ADDED THIS APRIL 24
-  //        * FOR NEW LOGIC OF NOT USING visitedCommunities
-  //        */
-  //       setCommunityStateValue((prev) => ({
-  //         ...prev,
-  //         currentCommunity: defaultCommunity,
-  //       }));
-  //     }
-  //   }, [router.query, communityStateValue.currentCommunity]);
+      if (!communityData.id) {
+        getCommunityData(community as string);
+        return;
+      }
+      // console.log("this is happening", communityStateValue);
+    } else {
+      /**
+       * JUST ADDED THIS APRIL 24
+       * FOR NEW LOGIC OF NOT USING visitedCommunities
+       */
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        currentCommunity: defaultCommunity,
+      }));
+    }
+  }, [router.query, communityStateValue.currentCommunity]);
 
   // console.log("LOL", communityStateValue);
-
-  //   return {
-  //     communityStateValue,
-  //     onJoinLeaveCommunity,
-  //     loading,
-  //     setLoading,
-  //     error,
-  //   };
 
   return {
     communityStateValue,
     onJoinLeaveCommunity,
     loading,
+    setLoading,
+    error,
   };
 };
 
