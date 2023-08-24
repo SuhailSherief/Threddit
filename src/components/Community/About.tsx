@@ -24,7 +24,6 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { FaReddit } from "react-icons/fa";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
-import useSelectFile from "@/src/hooks/useSelectFile";
 
 type AboutProps = {
   communityData: Community;
@@ -33,12 +32,35 @@ type AboutProps = {
   loading?: boolean;
 };
 
-const About = ({ communityData, pt, onCreatePage, loading }: AboutProps) => {
+const About: React.FC<AboutProps> = ({
+  communityData,
+  pt,
+  onCreatePage,
+  loading,
+}) => {
   const [user] = useAuthState(auth); // will revisit how 'auth' state is passed
+  const router = useRouter();
   const selectFileRef = useRef<HTMLInputElement>(null);
   const setCommunityStateValue = useSetRecoilState(communityState);
-  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
+
+  // April 24 - moved this logic to custom hook in tutorial build (useSelectFile)
+  const [selectedFile, setSelectedFile] = useState<string>();
+
+  // Added last!
   const [imageLoading, setImageLoading] = useState(false);
+
+  const onSelectImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = new FileReader();
+    if (event.target.files?.[0]) {
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    reader.onload = (readerEvent) => {
+      if (readerEvent.target?.result) {
+        setSelectedFile(readerEvent.target?.result as string);
+      }
+    };
+  };
 
   const updateImage = async () => {
     if (!selectedFile) return;
@@ -139,7 +161,7 @@ const About = ({ communityData, pt, onCreatePage, loading }: AboutProps) => {
                 )}
               </Flex>
               {!onCreatePage && (
-                <Link href={`/r/${communityData.id}/submit`}>
+                <Link href={`/r/${router.query.community}/submit`}>
                   <Button mt={3} height="30px" width="100%">
                     Create Post
                   </Button>
@@ -189,7 +211,7 @@ const About = ({ communityData, pt, onCreatePage, loading }: AboutProps) => {
                       accept="image/x-png,image/gif,image/jpeg"
                       hidden
                       ref={selectFileRef}
-                      onChange={onSelectFile}
+                      onChange={onSelectImage}
                     />
                   </Stack>
                 </>
