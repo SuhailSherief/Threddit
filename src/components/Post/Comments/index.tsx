@@ -35,7 +35,7 @@ type CommentsProps = {
 const Comments = ({ user, selectedPost, community }: CommentsProps) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
-  const [commentFetchLoading, setCommentFetchLoading] = useState(false);
+  const [commentFetchLoading, setCommentFetchLoading] = useState(true);
   const [commentCreateLoading, setCommentCreateLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState("");
   const setAuthModalState = useSetRecoilState(authModalState);
@@ -131,7 +131,7 @@ const Comments = ({ user, selectedPost, community }: CommentsProps) => {
         setComments((prev) => prev.filter((item) => item.id !== comment.id));
         // return true;
       } catch (error: any) {
-        console.log("Error deletig comment", error.message);
+        console.log("Error deleting comment", error.message);
         // return false;
       }
       setDeleteLoading("");
