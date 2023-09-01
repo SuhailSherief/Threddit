@@ -24,8 +24,13 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!user || !!communityStateValue.mySnippets.length) return;
-
+    if (!user) {
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        mySnippets: [],
+      }));
+      return;
+    }
     getSnippets();
   }, [user]);
 
@@ -105,6 +110,7 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
       const newSnippet: CommunitySnippet = {
         communityId: community.id,
         imageURL: community.imageURL || "",
+        isModerator: user?.uid === community.creatorId,
       };
       batch.set(
         doc(
