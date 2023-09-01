@@ -89,6 +89,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
       console.log("Transaction error", error);
       setNameError(error.message);
     }
+    // breaking changes
     setSnippetState((prev) => ({
       ...prev,
       mySnippets: [],
