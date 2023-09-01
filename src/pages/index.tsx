@@ -25,6 +25,9 @@ import usePosts from "../hooks/usePosts";
 import { Post, PostVote } from "../atoms/postAtom";
 import PageContentLayout from "../components/Layout/PageContentLayout";
 import useCommunityData from "../hooks/useCommunityData";
+import Recommendations from "../components/Community/Recommendations";
+import Premium from "../components/Community/Premium";
+import PersonalHome from "../components/Community/PersonalHome";
 
 const Home = () => {
   const [user, loadingUser] = useAuthState(auth);
@@ -189,7 +192,7 @@ const Home = () => {
         postVotes: [],
       }));
     };
-  }, [postStateValue.posts, user?.uid]);
+  }, [user, postStateValue.posts]);
 
   return (
     <PageContentLayout>
@@ -220,9 +223,9 @@ const Home = () => {
         )}
       </>
       <Stack spacing={5} position="sticky" top="14px">
-        {/* <Recommendations /> */}
-        {/* <Premium />
-        <PersonalHome /> */}
+        <Recommendations />
+        <Premium />
+        <PersonalHome />
       </Stack>
     </PageContentLayout>
   );
