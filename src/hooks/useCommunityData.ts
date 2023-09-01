@@ -28,6 +28,7 @@ const useCommunityData = (ssrCommunityData?: boolean) => {
       setCommunityStateValue((prev) => ({
         ...prev,
         mySnippets: [],
+        initSnippetsFetched: false,
       }));
       return;
     }
