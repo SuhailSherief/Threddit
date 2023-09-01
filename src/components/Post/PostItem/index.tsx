@@ -133,6 +133,7 @@ const PostItem = ({
                       boxSize="18px"
                       src={post.communityImageURL}
                       mr={2}
+                      alt="homepageimage"
                     />
                   ) : (
                     <Icon as={FaReddit} fontSize={18} mr={1} color="blue.500" />
