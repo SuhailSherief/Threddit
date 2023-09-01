@@ -24,6 +24,7 @@ import { auth, firestore } from "../firebase/clientApp";
 import usePosts from "../hooks/usePosts";
 import { Post, PostVote } from "../atoms/postAtom";
 import PageContentLayout from "../components/Layout/PageContentLayout";
+import useCommunityData from "../hooks/useCommunityData";
 
 const Home = () => {
   const [user, loadingUser] = useAuthState(auth);
@@ -36,7 +37,7 @@ const Home = () => {
     loading,
     setLoading,
   } = usePosts();
-  const communityStateValue = useRecoilValue(communityState);
+  const { communityStateValue } = useCommunityData();
 
   const getUserHomePosts = async () => {
     console.log("GETTING USER FEED");
@@ -168,12 +169,8 @@ const Home = () => {
      * the value is set to true when snippets are first retrieved inside
      * of getSnippets in useCommunityData
      */
-    if (!communityStateValue.initSnippetsFetched) return;
-
-    if (user) {
-      getUserHomePosts();
-    }
-  }, [user, communityStateValue.initSnippetsFetched]);
+    if (communityStateValue.initSnippetsFetched) getUserHomePosts();
+  }, [communityStateValue.initSnippetsFetched]);
 
   useEffect(() => {
     if (!user && !loadingUser) {
